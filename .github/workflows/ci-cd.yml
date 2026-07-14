@@ -1,0 +1,37 @@
+name: Build & Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Pull, install & build on EC2
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            export PATH="/home/ubuntu/.bun/bin:$PATH"
+            if [ ! -d "${{ secrets.EC2_APP_PATH }}" ]; then
+              git clone git@github.com:ZyouHQ/zyou-landing-page.git ${{ secrets.EC2_APP_PATH }}
+            fi
+            cd ${{ secrets.EC2_APP_PATH }}
+            git pull origin main
+            bun install --frozen-lockfile
+            # Install Playwright Chromium browser + Linux system dependencies (fonts, libssl, etc.)
+            npx playwright install chromium --with-deps
+            # Step 1: Vite build → dist/
+            bun run build
+            # Step 2: Playwright prerender → writes static HTML into dist/<route>/index.html
+            node scripts/prerender.mjs
+          EOF

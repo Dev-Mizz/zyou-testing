@@ -1,0 +1,5 @@
+# Public lead endpoint: the browser calls it with no Supabase key, so JWT
+# verification must be off. Guards (origin allowlist, honeypot, optional
+# Turnstile) live inside the function itself.
+[functions.early-access-lead]
+verify_jwt = false

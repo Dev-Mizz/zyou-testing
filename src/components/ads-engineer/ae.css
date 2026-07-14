@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE ADS ENGINEER — page styles, hand-transcribed from
+   claude-design-system-ref/ads-engineer/index.html <style>.
+   Scoped under .ae-page. Layout is mostly inline; this carries the
+   keyframes, the convergence/distinction grids, and the responsive
+   scrub-height tightening.
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes aeCorePulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(2.1); opacity: 0; }
+}
+.ae-page .ae-core-pulse { transform-box: fill-box; transform-origin: center; animation: aeCorePulse 2.4s var(--ease-standard, ease-in-out) infinite; }
+
+@keyframes aei-breathe {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(0,224,213,0.10), 0 0 18px rgba(0,224,213,0.05); }
+  50% { box-shadow: 0 0 0 1px rgba(0,224,213,0.22), 0 0 30px rgba(0,224,213,0.12); }
+}
+.ae-page .aei-breathe { animation: aei-breathe 5.2s ease-in-out infinite; }
+
+@keyframes aei-flow { to { stroke-dashoffset: -16; } }
+.ae-page .aei-flow { animation: aei-flow 0.7s linear infinite; }
+
+.ae-page .ae-converge-grid { /* base set inline; mobile override below */ }
+
+@media (max-width: 1024px) {
+  .ae-page .ae-converge-grid { grid-template-columns: 1fr !important; gap: 32px !important; text-align: center; justify-items: center; }
+}
+@media (max-width: 760px) {
+  .ae-page .ae-signal-row { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .ae-page .ae-distinction-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+  .ae-page .ae-distinction-rule { display: none !important; }
+  .ae-page .ae-converge-grid { gap: 8px !important; }
+  .ae-page .ae-converge-grid > div:first-child .zy-label-mono { margin-bottom: 14px !important; }
+  .ae-page .ae-converge-reserve { min-height: 110px !important; }
+  .ae-page .ae-cap { font-size: 17px !important; line-height: 1.4 !important; }
+  .ae-page .ae-cap h2 { font-size: 28px !important; }
+  .ae-page .ae-cap p { font-size: 16px !important; }
+  .ae-page .ae-converge-svg { width: min(92vw, 60vh) !important; height: min(92vw, 60vh) !important; }
+  .ae-page #madeof { height: 180vh !important; }
+  .ae-page #analogy { height: 150vh !important; }
+  /* long crossfade caption can't fit one line on a phone — let it wrap, grow the slot */
+  .ae-page .ae-an-sub { height: auto !important; min-height: 3.4em !important; width: 94vw !important; }
+  .ae-page .ae-an-sub > span { white-space: normal !important; line-height: 1.35; }
+  .ae-page .aei-fig3-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ae-page .ae-core-pulse { animation: none; opacity: 0; }
+  .ae-page .aei-breathe, .ae-page .aei-flow { animation: none !important; }
+}
